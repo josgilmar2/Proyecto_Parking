@@ -1,34 +1,20 @@
-class Parking():
+class Parking:
 
-    def __init__(self, lista_turismos, lista_motocicletas, lista_movilidad_reducida, plazas_totales=80):
-        self.__listaMotocicletas = lista_motocicletas
-        self.__listaTurismos = lista_turismos
-        self.__lista_minusvalidos = lista_movilidad_reducida
+    def __init__(self, lista_vehiculos, plazas_totales=80):
+        self.__lista_vehiculos = lista_vehiculos
         self.__plazas_totales = plazas_totales
+        self.__plazas_libres = len(lista_vehiculos)
+        self.__plazas_turismo = round(self.plazas_totales * 0.7)
+        self.__plazas_motocicleta = round(self.plazas_totales * 0.15)
+        self.__plazas_movilidad_reducida = round(self.plazas_totales * 0.15)
 
     @property
-    def lista_turismos(self):
-        return self.__listaTurismos
+    def lista_vehiculos(self):
+        return self.__lista_vehiculos
 
-    @lista_turismos.setter
-    def lista_turismos(self, lista_turismos):
-        self.__lista_turismos = lista_turismos
-
-    @property
-    def lista_motocicletas(self):
-        return self.__listaMotocicletas
-
-    @lista_motocicletas.setter
-    def lista_motocicletas(self, lista_motocicletas):
-        self.__lista_motocicletas = lista_motocicletas
-
-    @property
-    def lista_movilidad_reducida(self):
-        return self.__lista_minusvalidos
-
-    @lista_movilidad_reducida.setter
-    def lista_movilidad_reducida(self, lista_movilidad_reducida):
-        self.__lista_minusvalidos = lista_movilidad_reducida
+    @lista_vehiculos.setter
+    def lista_turismos(self, lista_vehiculos):
+        self.__lista_vehiculos = lista_vehiculos
 
     @property
     def plazas_totales(self):
@@ -38,11 +24,42 @@ class Parking():
     def plazas_totales(self, plazas_totales):
         self.__plazas_totales = plazas_totales
 
+    @property
+    def plazas_libres(self):
+        return self.__plazas_libres
+
+    @plazas_libres.setter
+    def plazas_libres(self, plazas_libres):
+        self.__plazas_libres = plazas_libres
+
+    @property
+    def plazas_turismo(self):
+        return self.__plazas_turismo
+
+    @plazas_turismo.setter
+    def plazas_turismo(self, plazas_turismo):
+        self.__plazas_turismo = plazas_turismo
+
+    @property
+    def plazas_motocicleta(self):
+        return self.__plazas_turismo
+
+    @plazas_motocicleta.setter
+    def plazas_motocicleta(self, plazas_motocicleta):
+        self.__plazas_motocicleta = plazas_motocicleta
+
+    @property
+    def plazas_movilidad_reducida(self):
+        return self.__plazas_movilidad_reducida
+
+    @plazas_movilidad_reducida.setter
+    def plazas_movilidad_reducida(self, plaza_movilidad_reducida):
+        self.__plazas_movilidad_reducida = plaza_movilidad_reducida
+
     def __str__(self):
-        for i in self.lista_turismos:
-            print(i)
-        for i in self.lista_motocicletas:
-            print(i)
-        for i in self.lista_movilidad_reducida:
-            print(i)
-        return ""
+        return f"El parking tiene un total de {self.plazas_totales} plazas de las cuales: \n" \
+               f"{self.plazas_turismo} plazas son para turismo \n" \
+               f"{self.plazas_motocicleta} plazas son para motocicleta \n" \
+               f"{self.plazas_movilidad_reducida} plazas son para movilidad reducida \n"
+
+

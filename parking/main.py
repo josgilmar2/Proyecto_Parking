@@ -13,7 +13,7 @@ print("Bienvenido al Parking JLGM.\n")
 parking_service.repartir_plazas()
 
 op = -1
-while op!= 0:
+while op != 0:
     print("Pulsa 1 para entrar como CLIENTE \n"
           "Pulse 2 para ABONARSE \n"
           "Pulse 3 para entrar como ADMINISTRADOR \n"
@@ -29,10 +29,10 @@ while op!= 0:
                     print("Has accedido al menú de CLIENTE \n"
                           "------------------------------------------- \n"
                           "Pulse 1 para depositar un vehículo \n"
-                                    "Pulse 2 para retirar un vehículo \n"
-                                    "Pulse 3 para depositar un vehículo como abonado \n"
-                                    "Pulse 4 para retirar un vehiculo como abonado \n"
-                                    "Pulse 0 para salir")
+                          "Pulse 2 para retirar un vehículo \n"
+                          "Pulse 3 para depositar un vehículo como abonado \n"
+                          "Pulse 4 para retirar un vehiculo como abonado \n"
+                          "Pulse 0 para salir")
                     op2 = int(input())
                     try:
                         if op2 != 1 and op2 != 2 and op2 != 3 and op2 != 4 and op2 != 0:
@@ -42,7 +42,7 @@ while op!= 0:
                             if op2 == 1:
                                 try:
                                     parking_service.ver_plazas_libres_normales()
-                                    print("¿Qué quiere depositar? \n"
+                                    print("\n¿Qué quiere depositar? \n"
                                           "-------------------------------------\n"
                                           "Pulse 1 para depositar turismo\n"
                                           "Pulse 2 para depositar motocicleta\n"
@@ -69,12 +69,15 @@ while op!= 0:
                                         if parking_service.depositar_movilidad_reducida(str(input())):
                                             print("Se ha depositado la motocicleta con éxito")
                                         else:
-                                            print("ERROR. No se ha depositado correctamente la motocicleta porque no hay más plazas")
+                                            print(
+                                                "ERROR. No se ha depositado correctamente la motocicleta porque no "
+                                                "hay más plazas")
                                     elif op3 == 0:
                                         break
                                 except ValueError:
                                     print("ERROR. TIenes que introducir una de las opciones que se piden")
                             elif op2 == 2:
+
                                 break
                             elif op2 == 3:
                                 break
