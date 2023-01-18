@@ -1,6 +1,6 @@
 class Parking:
 
-    def __init__(self, lista_vehiculos, plazas_totales=80):
+    def __init__(self, lista_vehiculos, plazas_totales):
         self.__lista_vehiculos = lista_vehiculos
         self.__plazas_totales = plazas_totales
         self.__plazas_libres = len(lista_vehiculos)
@@ -13,7 +13,7 @@ class Parking:
         return self.__lista_vehiculos
 
     @lista_vehiculos.setter
-    def lista_turismos(self, lista_vehiculos):
+    def lista_vehiculos(self, lista_vehiculos):
         self.__lista_vehiculos = lista_vehiculos
 
     @property
@@ -42,7 +42,7 @@ class Parking:
 
     @property
     def plazas_motocicleta(self):
-        return self.__plazas_turismo
+        return self.__plazas_motocicleta
 
     @plazas_motocicleta.setter
     def plazas_motocicleta(self, plazas_motocicleta):
@@ -53,8 +53,8 @@ class Parking:
         return self.__plazas_movilidad_reducida
 
     @plazas_movilidad_reducida.setter
-    def plazas_movilidad_reducida(self, plaza_movilidad_reducida):
-        self.__plazas_movilidad_reducida = plaza_movilidad_reducida
+    def plazas_movilidad_reducida(self, plazas_movilidad_reducida):
+        self.__plazas_movilidad_reducida = plazas_movilidad_reducida
 
     def __str__(self):
         return f"El parking tiene un total de {self.plazas_totales} plazas de las cuales: \n" \

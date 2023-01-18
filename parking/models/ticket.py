@@ -27,19 +27,22 @@ class Ticket:
         self.__pago_realizado = pago_realizado
 
     def __str__(self):
-        if self.vehiculo.fecha_salida is None:
-            print("PARKING JLGM \n"
-                  "------------------------------------- \n"
-                  f"Matrícula: {self.vehiculo.matricula} \n"
-                  f"Fecha de depósito: ´{self.vehiculo.fecha_deposito} \n"
-                  f"PIN: {self.vehiculo.plaza.pin}")
+        if self.vehiculo.fecha_salida == None:
+            return "\nPARKING JLGM \n" \
+                  "-------------------------------------------------- \n" \
+                  f"Matrícula: {self.vehiculo.matricula} \n" \
+                   f"Número de plaza: {self.vehiculo.plaza.num_plaza} \n" \
+                  f"Fecha de depósito: ´{self.vehiculo.fecha_deposito} \n" \
+                  f"PIN: {self.vehiculo.plaza.pin}\n" \
+                   f"-----------------------------------------------"
         else:
-            print("PARKING JLGM \n"
-                  "------------------------------------- \n"
-                  f"Matrícula: {self.vehiculo.matricula} \n"
-                  f"Fecha de depósito: ´{self.vehiculo.fecha_deposito} \n"
-                  f"Fecha salida: {self.vehiculo.fecha_salida} \n"
-                  f"Tarifa a pagar: ")
+            return "\nPARKING JLGM \n" \
+                  "------------------------------------------------- \n" \
+                  f"Matrícula: {self.vehiculo.matricula} \n" \
+                  f"Fecha de depósito: ´{self.vehiculo.fecha_deposito} \n" \
+                  f"Fecha salida: {self.vehiculo.fecha_salida} \n" \
+                  f"Tarifa a pagar: {self.calcular_tarifa_a_pagar(self.vehiculo)} \n" \
+                   f"-----------------------------------------------\n"
 
     def calcular_tarifa_a_pagar(self, vehiculo):
         if type(vehiculo) == Turismo:

@@ -1,7 +1,7 @@
 class ClienteAbonado:
 
     def __init__(self, dni, nombre, apellidos, num_tarjeta, tipo, email,
-                 fecha_activacion,fecha_caducidad, vehiculo, plaza):
+                 fecha_activacion, fecha_caducidad, vehiculo, plaza):
         self.__dni = dni
         self.__nombre = nombre
         self.__apellidos = apellidos
