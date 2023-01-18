@@ -15,7 +15,7 @@ from parking.service.zona_cliente_service import ZonaClienteService
 from parking.service.zona_admin_service import ZonaAdminService
 
 import pickle
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 
 lista_vehiculos = list()
@@ -28,7 +28,10 @@ t1 = Turismo("1111DDD", None, None, None)
 p1 = Plaza(7, 123456, False, None)
 
 a1 = ClienteAbonado("29535936A", "José Luis", "Gil Martín", "0000-0000-0000-0000", "Mensual",
-                    "josgilmar2@gmail.com", datetime.now(), datetime.now().replace(month=+1), t1, p1)
+                    "josgilmar2@gmail.com", datetime.now(), datetime.now() + timedelta(days=30), t1, p1)
+
+for i in lista_clientes_abonados:
+    print(i)
 
 lista_vehiculos.append(t1)
 lista_clientes_abonados.append(a1)
@@ -66,7 +69,7 @@ zona_admin_service = ZonaAdminService(cliente_abonado_service)
 op = -1
 while op != 0:
     print("\nBienvenido al Parking JLGM.\n"
-          "---------------------------------"
+          "---------------------------------\n"
           "Pulsa 1 para entrar como CLIENTE \n"
           "Pulse 2 para ABONARSE \n"
           "Pulse 3 para entrar como ADMINISTRADOR \n"
@@ -129,7 +132,7 @@ while op != 0:
                                 matricula = input("Introduzca la matrícula de su vehículo para saber si está abonado "
                                                   "al parking: ")
                                 if cliente_abonado_service.comprobar_cliente_abonado(dni, matricula):
-                                    cliente_abonado = cliente_abonado_service.buscar_abonado_por_dni(dni)
+                                    cliente_abonado = cliente_abonado_service.buscar_cliente_abonado_por_dni(dni)
                                     try:
                                         print(f"\nBuenas {cliente_abonado.nombre} {cliente_abonado.apellidos}\n")
                                         pin = int(input("Diga el pin de su abono para depositar su vehículo: "))
@@ -143,7 +146,7 @@ while op != 0:
                                 matricula = input("Introduzca la matrícula de su vehículo para saber si está abonado "
                                                   "al parking: ")
                                 if cliente_abonado_service.comprobar_cliente_abonado(dni, matricula):
-                                    cliente_abonado = cliente_abonado_service.buscar_abonado_por_dni(dni)
+                                    cliente_abonado = cliente_abonado_service.buscar_cliente_abonado_por_dni(dni)
                                 try:
                                     print(f"\nBuenas {cliente_abonado.nombre} {cliente_abonado.apellidos}\n")
                                     pin = int(input("Diga el pin de su abono para retirar su vehículo: "))
@@ -171,7 +174,8 @@ while op != 0:
                                 nombre = input("Introduce tu nombre: ")
                                 apellidos = input("Introduce tu apellidos: ")
                                 num_tarjeta = input("Introduce tu número de tarjeta: ")
-                                tipo = int(input("Introduce el tipo del abono: \n"
+                                tipo = int(input("\nIntroduce el tipo del abono: \n"
+                                                 "-------------------------------\n"
                                                  "Pulse 1 para un abono Mensual\n"
                                                  "Pulse 2 para un abono Trimestral\n"
                                                  "Pulse 3 para un abono Semestral\n"
@@ -190,7 +194,7 @@ while op != 0:
                                 except ValueError:
                                     print("ERROR. Tienes que introducir una de las opciones que se piden")
                                 email = input("Introduce tu email: ")
-                                matricula = input("Introduce la matrícula del vehículo a estacionar:")
+                                matricula = input("Introduce la matrícula del vehículo a estacionar: ")
                                 tipo_vehiculo = int(input("\nIndique el tipo de vehículo: \n"
                                                           "Pulse 1 para turismo\n"
                                                           "Pulse 2 para motocicleta\n"
@@ -211,10 +215,67 @@ while op != 0:
                                 vehiculo_del_abonado.plaza = plaza
                                 if zona_admin_service.dar_de_alta_a_un_cliente_abonado(dni, nombre, apellidos, num_tarjeta, tipo, email, vehiculo_del_abonado, plaza):
                                     print("\nUsted se ha abonado al Parking JLGM con éxito\n")
+                                    print(zona_admin_service.imprimir_alta_abonado(dni, nombre, apellidos, num_tarjeta, tipo, email, vehiculo_del_abonado, plaza))
                                 else:
                                     print("\nNo se ha agregado correctamente como abonado. Inténtelo de nuevo\n")
                             elif op2 == 2:
-                                break
+                                print("\n¿Qué desea modificar de su abono?\n"
+                                      "-----------------------------------\n"
+                                      "Pulse 1 para modificar sus datos personales\n"
+                                      "Pulse 2 para renovar su abono")
+                                op3 = int(input())
+                                try:
+                                    if op3 != 1 and op3 != 2 and op3 != 0:
+                                        raise ValueError
+                                    else:
+                                        if op3 == 1:
+                                            dni = input("Introduce tu dni para poder acceder a tu abono: ")
+                                            matricula = input("\nAdemás necesitamos saber la matrícula para "
+                                                              "asegurarnos: ")
+                                            if cliente_abonado_service.comprobar_cliente_abonado(dni, matricula):
+                                                nombre = input("\nIntroduzca su nuevo nombre: ")
+                                                apellidos = input("Introduzca sus nuevos apellidos: ")
+                                                num_tarjeta = input("Introduzca su nuevo número de tarjeta: ")
+                                                email = input("Introduzca su nuevo email: ")
+                                                print(zona_admin_service.modificar_datos_cliente_abonado(dni, nombre, apellidos, num_tarjeta, email))
+                                                print("\nSu abono se ha modificado con éxito\n")
+                                                for i in lista_clientes_abonados:
+                                                    print(i)
+                                            else:
+                                                print("\nEl dni o la matrícula son incorrecto/s.\n")
+                                        elif op3 == 2:
+                                            dni = input("Introduce tu dni para poder acceder a tu abono: ")
+                                            matricula = input("\nAdemás necesitamos saber la matrícula para "
+                                                              "asegurarnos: ")
+                                            if cliente_abonado_service.comprobar_cliente_abonado(dni, matricula):
+                                                cliente_abonado_a_renovar = cliente_abonado_service.buscar_cliente_abonado_por_dni(dni)
+                                                tipo = int(input("\nIntroduce el tipo del abono para renovar el suyo: "
+                                                                 "\n"
+                                                                 "-------------------------------\n"
+                                                                 "Pulse 1 para un abono Mensual\n"
+                                                                 "Pulse 2 para un abono Trimestral\n"
+                                                                 "Pulse 3 para un abono Semestral\n"
+                                                                 "Pulse 4 para un abono Anual\n"))
+                                                try:
+                                                    if tipo != 1 and tipo != 2 and tipo != 3 and tipo != 4:
+                                                        raise ValueError
+                                                    elif tipo == 1:
+                                                        tipo_abono = "Mensual"
+                                                    elif tipo == 2:
+                                                        tipo_abono = "Trimestral"
+                                                    elif tipo == 3:
+                                                        tipo_abono = "Semestral"
+                                                    elif tipo == 4:
+                                                        tipo_abono = "Anual"
+                                                except ValueError:
+                                                    print("ERROR. Tienes que introducir una de las opciones que se "
+                                                          "piden")
+                                                print("\nSu abono se ha modificado con éxito\n")
+                                                print(zona_admin_service.renovar_abono_del_cliente(cliente_abonado_a_renovar))
+                                            else:
+                                                print("\nEl dni o la matrícula son incorrecto/s.\n")
+                                except ValueError:
+                                    print("ERROR. Tienes que introducir una de las opciones que se piden")
                             elif op2 == 3:
                                 break
                     except ValueError:

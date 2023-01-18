@@ -35,7 +35,7 @@ class ClienteAbonado:
 
     @apellidos.setter
     def apellidos(self, apellidos):
-        self._apellidos = apellidos
+        self.__apellidos = apellidos
 
     @property
     def num_tarjeta(self):
@@ -92,3 +92,13 @@ class ClienteAbonado:
     @plaza.setter
     def plaza(self, plaza):
         self.__plaza = plaza
+
+    def __str__(self):
+        return f"\t\tABONO \n" \
+               f"------------------------------\n" \
+               f"DNI: {self.dni} \n" \
+               f"Nombre Completo: {self.nombre} {self.apellidos} \n" \
+               f"Email: {self.email} \n" \
+               f"Tipo del Abono: {self.tipo} \n" \
+               f"Fecha de caducidad: {self.fecha_caducidad} \n" \
+               f"-------------------------------\n"

@@ -14,7 +14,7 @@ class ClienteAbonadoService:
     def lista_clientes_abonados(self, lista_clientes_abonados):
         self.__lista_clientes_abonados = lista_clientes_abonados
 
-    def buscar_abonado_por_dni(self, dni):
+    def buscar_cliente_abonado_por_dni(self, dni):
         fichero_cliente_abonado = open("./data/clientes_abonados", "rb")
         datos_cliente_abonado = pickle.load(fichero_cliente_abonado)
         for i in datos_cliente_abonado:
@@ -22,8 +22,8 @@ class ClienteAbonadoService:
                 return i
         return None
 
-    def comprobar_cliente_abonado(self,dni, matricula):
-        cliente_abonado = self.buscar_abonado_por_dni(dni)
+    def comprobar_cliente_abonado(self, dni, matricula):
+        cliente_abonado = self.buscar_cliente_abonado_por_dni(dni)
         try:
             if cliente_abonado.vehiculo.matricula == matricula:
                 return True
@@ -38,3 +38,5 @@ class ClienteAbonadoService:
         pickle.dump(self.lista_clientes_abonados, fichero_cliente_abonado)
         fichero_cliente_abonado.close()
 
+    def editar_cliente_abonado(self, cliente_abonado):
+        cliente_abonado_a_editar = self.buscar_cliente_abonado_por_dni(cliente_abonado.dni)
