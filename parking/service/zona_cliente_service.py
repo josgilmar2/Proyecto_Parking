@@ -47,26 +47,48 @@ class ZonaClienteService:
     def ticket_service(self, ticket_service):
         self.__ticket_service = ticket_service
 
+    def generar_num_plaza_turismo(self, parking):
+        for i in parking.lista_vehiculos:
+            num_plaza = random.randint(1, 56)
+            while i.plaza.num_plaza == num_plaza:
+                num_plaza = random.randint(1, 56)
+        return num_plaza
+
+    def generar_num_plaza_motocicleta(self, parking):
+        for i in parking.lista_vehiculos:
+            num_plaza = random.randint(57, 68)
+            while i.plaza.num_plaza == num_plaza:
+                num_plaza = random.randint(57, 68)
+        return num_plaza
+
+    def generar_num_plaza_movilidad_reducida(self, parking):
+        for i in parking.lista_vehiculos:
+            num_plaza = random.randint(68, 80)
+            while i.plaza.num_plaza == num_plaza:
+                num_plaza = random.randint(68, 80)
+        return num_plaza
+
     def asignar_vehiculo_a_una_plaza(self, vehiculo):
         parking = self.parking_service.parking
-        self.parking_service.actualizar_parking()
+        self.parking_service.actualizar_parking(parking)
         if 0 < parking.plazas_libres <= parking.plazas_totales:
             if type(vehiculo) is Turismo:
-                plaza = Plaza(round((random.random() * parking.plazas_turismo + 1 - 1)), round(random.randint(100000, 999999)), True, vehiculo)
+                plaza = Plaza(self.generar_num_plaza_turismo(parking), random.randint(100000, 999999), True, vehiculo)
                 plaza.vehiculo = vehiculo
                 vehiculo.plaza = plaza
                 vehiculo.fecha_deposito = datetime.now()
+                vehiculo.fecha_salida = None
                 self.plaza_service.annadir_plaza(plaza)
                 return True
             if type(vehiculo) is Motocicleta:
-                plaza = Plaza(round((random.random() * parking.plazas_motocicleta + 1 - 1)), round(random.randint(100000, 999999)), True, vehiculo)
+                plaza = Plaza(self.generar_num_plaza_motocicleta(parking), round(random.randint(100000, 999999)), True, vehiculo)
                 plaza.vehiculo = vehiculo
                 vehiculo.plaza = plaza
                 vehiculo.fecha_deposito = datetime.now()
                 self.plaza_service.annadir_plaza(plaza)
                 return True
             if type(vehiculo) is MovilidadReducida:
-                plaza = Plaza(round((random.random() * parking.plazas_movilidad_reducida + 1 - 1)), round(random.randint(100000, 999999)), True, vehiculo)
+                plaza = Plaza(self.generar_num_plaza_movilidad_reducida(parking), round(random.randint(100000, 999999)), True, vehiculo)
                 plaza.vehiculo = vehiculo
                 vehiculo.plaza = plaza
                 vehiculo.fecha_deposito = datetime.now()
@@ -91,8 +113,6 @@ class ZonaClienteService:
             vehiculo.fecha_salida = datetime.now()
             plaza.ocupada = False
             return self.ticket_service.crear_ticket_salida(vehiculo)
-        else:
-            return print("Funciona al tonto")
 
     def depositar_vehiculo_abonado(self, cliente_abonado, pin):
         if cliente_abonado.plaza.pin == pin:

@@ -1,7 +1,7 @@
 class ClienteAbonado:
 
     def __init__(self, dni, nombre, apellidos, num_tarjeta, tipo, email,
-                 fecha_activacion, fecha_caducidad, vehiculo, plaza):
+                 fecha_activacion, fecha_caducidad, precio_abono, vehiculo, plaza):
         self.__dni = dni
         self.__nombre = nombre
         self.__apellidos = apellidos
@@ -10,6 +10,7 @@ class ClienteAbonado:
         self.__email = email
         self.__fecha_activacion = fecha_activacion
         self.__fecha_caducidad = fecha_caducidad
+        self.__precio_abono = precio_abono
         self.__vehiculo = vehiculo
         self.__plaza = plaza
 
@@ -78,6 +79,14 @@ class ClienteAbonado:
         self.__fecha_caducidad = fecha_caducidad
 
     @property
+    def precio_abono(self):
+        return self.__precio_abono
+
+    @precio_abono.setter
+    def precio_abono(self, precio_abono):
+        self.__precio_abono = precio_abono
+
+    @property
     def vehiculo(self):
         return self.__vehiculo
 
@@ -100,5 +109,7 @@ class ClienteAbonado:
                f"Nombre Completo: {self.nombre} {self.apellidos} \n" \
                f"Email: {self.email} \n" \
                f"Tipo del Abono: {self.tipo} \n" \
+               f"Plaza de parking: {self.plaza.num_plaza} \n" \
                f"Fecha de caducidad: {self.fecha_caducidad} \n" \
+               f"Total cobrado: {self.precio_abono} €\n" \
                f"-------------------------------\n"

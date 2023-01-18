@@ -34,10 +34,8 @@ class TicketService:
         print(ticket)
 
     def buscar_tickets_pagados(self):
-        fichero_ticket = open("./data/tickets", "wb")
-        datos_ticket = pickle.load(fichero_ticket)
         lista_tickets = list()
-        for i in datos_ticket:
+        for i in self.lista_tickets:
             if i.pago_realizado:
                 lista_tickets.append(i)
         return lista_tickets

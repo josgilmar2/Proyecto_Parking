@@ -5,6 +5,7 @@ from parking.models.motocicleta import Motocicleta
 from parking.models.movilidad_reducida import MovilidadReducida
 from datetime import datetime
 import random
+import pickle
 
 
 class ParkingService:
@@ -20,25 +21,21 @@ class ParkingService:
     def parking(self, parking):
         self.__parking = parking
 
-    def actualizar_parking(self):
-        plaza_turismo = 0
-        plaza_motocicleta = 0
-        plaza_movilidad_reducida = 0
-        for i in self.parking.lista_vehiculos:
+    def actualizar_parking(self, parking):
+        parking.plazas_turismo = 56
+        parking.plazas_motocicleta = 12
+        parking.plazas_movilidad_reducida = 12
+        for i in parking.lista_vehiculos:
             if type(i) == Turismo:
-                plaza_turismo += 1
-            if type(i) == Motocicleta:
-                plaza_motocicleta += 1
-            if type(i) == MovilidadReducida:
-                plaza_movilidad_reducida += 1
-        self.parking.plazas_libres = int(self.parking.plazas_totales) - int(len(self.parking.lista_vehiculos))
-        self.parking.plazas_turismo -= plaza_turismo
-        self.parking.plazas_motocicleta -= plaza_motocicleta
-        self.parking.plazas_movilidad_reducida -= plaza_movilidad_reducida
+                parking.plazas_turismo -= 1
+            elif type(i) == Motocicleta:
+                parking.plazas_motocicleta -= 1
+            elif type(i) == MovilidadReducida:
+                parking.plazas_movilidad_reducida -= 1
 
-    def ver_plazas_parking(self):
-        self.actualizar_parking()
-        return f"Quedan un total de {self.parking.plazas_libres} plazas de las cuales: \n" \
-               f"{self.parking.plazas_turismo} son para TURISMOS \n" \
-               f"{self.parking.plazas_motocicleta} son para MOTOCICLETAS \n" \
-               f"{self.parking.plazas_movilidad_reducida} son para MOVILIDAD REDUCIDA"
+    def ver_plazas_parking(self, parking):
+        self.actualizar_parking(parking)
+        return f"Quedan un total de {parking.plazas_totales - len(parking.lista_vehiculos)} plazas de las cuales: \n" \
+               f"{parking.plazas_turismo} son para TURISMOS \n" \
+               f"{parking.plazas_motocicleta} son para MOTOCICLETAS \n" \
+               f"{parking.plazas_movilidad_reducida} son para MOVILIDAD REDUCIDA"

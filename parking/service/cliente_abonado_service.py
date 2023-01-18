@@ -1,5 +1,5 @@
 import pickle
-
+from datetime import datetime, timedelta
 
 class ClienteAbonadoService:
 
@@ -17,6 +17,7 @@ class ClienteAbonadoService:
     def buscar_cliente_abonado_por_dni(self, dni):
         fichero_cliente_abonado = open("./data/clientes_abonados", "rb")
         datos_cliente_abonado = pickle.load(fichero_cliente_abonado)
+        fichero_cliente_abonado.close()
         for i in datos_cliente_abonado:
             if i.dni == dni:
                 return i
@@ -38,5 +39,26 @@ class ClienteAbonadoService:
         pickle.dump(self.lista_clientes_abonados, fichero_cliente_abonado)
         fichero_cliente_abonado.close()
 
-    def editar_cliente_abonado(self, cliente_abonado):
-        cliente_abonado_a_editar = self.buscar_cliente_abonado_por_dni(cliente_abonado.dni)
+    def buscar_clientes_abonados(self):
+        fichero_cliente_abonado = open("./data/clientes_abonados", "rb")
+        datos_cliente_abonado = pickle.load(fichero_cliente_abonado)
+        fichero_cliente_abonado.close()
+        result = list()
+        for i in datos_cliente_abonado:
+            result.append(i)
+        return result
+
+    def buscar_caducidad_abonos_mes(self, mes):
+        resultado = list()
+        for i in self.lista_clientes_abonados:
+            if int(i.fecha_caducidad.month) == mes:
+                resultado.append(i)
+        return resultado
+
+    def buscar_caducidad_diez_dias(self):
+        resultado = list()
+        fecha_final = datetime.now() + timedelta(days=10)
+        for i in self.lista_clientes_abonados:
+            if datetime.now() < i.fecha_caducidad < fecha_final:
+                resultado.append(i)
+        return resultado

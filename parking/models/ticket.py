@@ -27,7 +27,7 @@ class Ticket:
         self.__pago_realizado = pago_realizado
 
     def __str__(self):
-        if self.vehiculo.fecha_salida == None:
+        if self.vehiculo.fecha_salida is None:
             return "\nPARKING JLGM \n" \
                   "-------------------------------------------------- \n" \
                   f"Matrícula: {self.vehiculo.matricula} \n" \

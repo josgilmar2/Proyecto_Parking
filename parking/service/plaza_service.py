@@ -23,6 +23,7 @@ class PlazaService:
     def buscar_por_num_plaza(self, num_plaza):
         fichero_plaza = open("./data/plazas", "rb")
         datos_plaza = pickle.load(fichero_plaza)
+        fichero_plaza.close()
         for i in datos_plaza:
             if i.num_plaza == num_plaza:
                 return i

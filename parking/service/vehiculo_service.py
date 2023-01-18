@@ -23,6 +23,7 @@ class VehiculoService:
     def buscar_por_matricula(self, matricula):
         fichero_vehiculo = open("./data/vehiculos", "rb")
         datos_vehiculo = pickle.load(fichero_vehiculo)
+        fichero_vehiculo.close()
         for i in datos_vehiculo:
             if i.matricula == matricula:
                 return i
