@@ -26,12 +26,12 @@ lista_clientes_abonados = list()
 admin = Admin("admin", "1234")
 
 t1 = Turismo("1111DDD", datetime.now(), None, None)
-t2 = Turismo("2222CCC", datetime.now(), datetime(2023, 1, 19, 13, 45, 46), None)
+t2 = Turismo("2222CCC", datetime(2023, 1, 18, 22, 22, 22), datetime(2023, 1, 19, 13, 45, 46), None)
 
-m1 = Motocicleta("3333GGG", datetime.now(), datetime(2023, 1, 19, 17, 32, 1), None)
+m1 = Motocicleta("3333GGG", datetime(2023, 1, 19, 12, 34, 23), datetime(2023, 1, 19, 17, 32, 1), None)
 m2 = Motocicleta("4444FFF", datetime.now(), None, None)
 
-mv1 = MovilidadReducida("5555HHH", datetime.now(), datetime(2023, 1, 19, 11, 23, 32), None)
+mv1 = MovilidadReducida("5555HHH", datetime(2023, 1, 19, 8, 12, 2), datetime(2023, 1, 19, 11, 23, 32), None)
 
 p1 = Plaza(7, 123456, True, t1)
 p2 = Plaza(23, 567890, True, t2)
@@ -86,7 +86,7 @@ ticket_service = TicketService(lista_tickets)
 cliente_abonado_service = ClienteAbonadoService(lista_clientes_abonados)
 
 zona_cliente_service = ZonaClienteService(parking_service, vehiculo_service, plaza_service, ticket_service)
-zona_admin_service = ZonaAdminService(cliente_abonado_service, ticket_service)
+zona_admin_service = ZonaAdminService(cliente_abonado_service, ticket_service, vehiculo_service)
 
 op = -1
 while op != 0:
@@ -188,6 +188,8 @@ while op != 0:
                             raise ValueError
                         else:
                             if op2 == 1:
+                                for i in lista_clientes_abonados:
+                                    print(i)
                                 print("\nPara abonarse, siga las siguientes instrucciones:\n")
                                 dni = input("Introduce tu dni: ")
                                 nombre = input("Introduce tu nombre: ")
@@ -240,7 +242,8 @@ while op != 0:
                                     print("Usted se ha abonado al Parking JLGM con éxito\n")
 
                                 else:
-                                    print("\nNo se ha agregado correctamente como abonado. Inténtelo de nuevo\n")
+                                    print("\nNo se ha agregado correctamente como abonado ya que el dni o la "
+                                          "matrícula están registradas en el sistema. Inténtelo de nuevo\n")
                             elif op2 == 2:
                                 print("\n¿Qué desea modificar de su abono?\n"
                                       "-----------------------------------\n"
@@ -297,7 +300,7 @@ while op != 0:
                                                 except ValueError:
                                                     print("ERROR. Tienes que introducir una de las opciones que se "
                                                           "piden")
-                                                zona_admin_service.renovar_abono_del_cliente(cliente_abonado_a_renovar)
+                                                print(zona_admin_service.renovar_abono_del_cliente(tipo_abono, cliente_abonado_a_renovar))
                                                 print("\nSu abono se ha modificado con éxito\n")
                                             else:
                                                 print("\nEl dni es incorrecto.\n")
@@ -312,11 +315,14 @@ while op != 0:
                                         comprobacion = True
                                 if comprobacion:
                                     zona_admin_service.dar_de_baja_a_un_cliente_abonado(cliente_abonado_a_eliminar)
-                                    print("\nSe ha dado de baja con éxito\n")
+                                    print("\nSe ha dado de baja con éxito.\n")
+                                else:
+                                    print("\nEl dni es incorrecto.\n")
                     except ValueError:
                         print("\nERROR. Tienes que introducir una de las opciones que se piden")
             elif op == 3:
                 usuario = input("\nPara entrar como ADMINISTRADOR, primeramente deberá realizar un loguin.\n"
+                                "(Las credenciales se encuentran arriba del fichero main.py)\n"
                                 "\nPara empezar introduzca su usuario: ")
                 contrasenna = input("Ahora, introduzca su contraseña: ")
                 if admin.usuario == usuario and admin.contrasenna == contrasenna:
@@ -359,7 +365,11 @@ while op != 0:
                                     print(f"\nEl total recaudado entre la fecha: {fecha_primera} "
                                           f"y la fecha: {fecha_segunda} es de {round(zona_admin_service.calcular_facturacion_entre_fechas(fecha_primera, fecha_segunda), 2)} €")
                                 elif op2 == 3:
-                                    print(zona_admin_service.imprimir_clientes_abonados())
+                                    if len(lista_clientes_abonados) == 0:
+                                        print("\nAhora mismo no existe ningún abonado al parking")
+                                    else:
+                                        for i in lista_clientes_abonados:
+                                            print(i)
                                 elif op2 == 4:
                                     print("\n¿Qúe desea consultar?\n"
                                           "-----------------------------------------------------\n"

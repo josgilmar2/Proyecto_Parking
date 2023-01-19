@@ -103,9 +103,9 @@ class ZonaClienteService:
         if self.asignar_vehiculo_a_una_plaza(vehiculo) and not self.vehiculo_service.comprobar_matricula(vehiculo.matricula):
             self.ticket_service.crear_ticket_llegada(vehiculo)
             self.vehiculo_service.annadir_vehiculo(vehiculo)
-            return print("El vehículo se ha depositado correctamente\n")
+            return print("\nEl vehículo se ha depositado correctamente\n")
         else:
-            return print("\nEl vehículo NO se ha depositado correctamente\n")
+            return print("\nEl vehículo NO se ha depositado correctamente ya que esa matrícula está registrada\n")
 
     def retirar_vehiculo_normal(self, matricula, num_plaza, pin):
         vehiculo = self.vehiculo_service.buscar_por_matricula(matricula)

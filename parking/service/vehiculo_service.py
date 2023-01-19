@@ -27,7 +27,7 @@ class VehiculoService:
         return None
 
     def comprobar_matricula(self, matricula):
-        for i in self.vehiculo_service.lista_vehiculos:
+        for i in self.lista_vehiculos:
             if i.matricula == matricula:
                 return True
         return False

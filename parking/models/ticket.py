@@ -48,10 +48,7 @@ class Ticket:
         tiempo_estacionado = divmod((vehiculo.fecha_salida - vehiculo.fecha_deposito).total_seconds(), 60)[0]
         if type(vehiculo) == Turismo:
             return tiempo_estacionado * 0.12
-            #return abs((vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.12)
         elif type(vehiculo) == Motocicleta:
             return tiempo_estacionado * 0.08
-            #return abs((vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.08)
         elif type(vehiculo) == MovilidadReducida:
             return tiempo_estacionado * 0.1
-            #return abs((vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.1)
