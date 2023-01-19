@@ -40,10 +40,3 @@ class TicketService:
                 lista_tickets.append(i)
         return lista_tickets
 
-    def calcular_facturacion_entre_fechas(self, fecha_primera, fecha_segunda):
-        lista_ticket_pagados = self.buscar_tickets_pagados()
-        resultado = list()
-        for i in lista_ticket_pagados:
-            if fecha_primera <= i.vehiculo.fecha_salida <= fecha_segunda:
-                resultado.append(i)
-        return resultado

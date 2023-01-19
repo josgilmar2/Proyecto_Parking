@@ -26,16 +26,39 @@ lista_clientes_abonados = list()
 admin = Admin("admin", "1234")
 
 t1 = Turismo("1111DDD", datetime.now(), None, None)
+t2 = Turismo("2222CCC", datetime.now(), datetime(2023, 1, 19, 13, 45, 46), None)
 
-p1 = Plaza(7, 123456, False, None)
+m1 = Motocicleta("3333GGG", datetime.now(), datetime(2023, 1, 19, 17, 32, 1), None)
+m2 = Motocicleta("4444FFF", datetime.now(), None, None)
+
+mv1 = MovilidadReducida("5555HHH", datetime.now(), datetime(2023, 1, 19, 11, 23, 32), None)
+
+p1 = Plaza(7, 123456, True, t1)
+p2 = Plaza(23, 567890, True, t2)
+p3 = Plaza(59, 345678, True, m1)
+p4 = Plaza(63, 234567, True, m2)
+p5 = Plaza(75, 456789, True, mv1)
 
 t1.plaza = p1
+t2.plaza = p2
+m1.plaza = p3
+m2.plaza = p4
+mv1.plaza = p5
+
+tk1 = Ticket(t1, False)
+tk2 = Ticket(t2, True)
+tk3 = Ticket(m1, True)
+tk4 = Ticket(m2, False)
+tk5 = Ticket(mv1, True)
 
 a1 = ClienteAbonado("29535936A", "José Luis", "Gil Martín", "0000-0000-0000-0000", "Mensual",
-                    "josgilmar2@gmail.com", datetime.now(), datetime.now() + timedelta(days=30), 25 , t1, p1)
+                    "josgilmar2@gmail.com", datetime.now(), datetime.now() + timedelta(days=30), 25, t1, p1)
 
-lista_vehiculos.append(t1)
-lista_clientes_abonados.append(a1)
+
+lista_vehiculos = [t1, t2, m1, m2, mv1]
+lista_plazas = [p1, p2, p3, p4, p5]
+lista_tickets = [tk1, tk2, tk3, tk4, tk5]
+lista_clientes_abonados = [a1]
 
 fichero_vehiculo = open("data/vehiculos", "wb")
 pickle.dump(lista_vehiculos, fichero_vehiculo)
@@ -65,8 +88,6 @@ cliente_abonado_service = ClienteAbonadoService(lista_clientes_abonados)
 zona_cliente_service = ZonaClienteService(parking_service, vehiculo_service, plaza_service, ticket_service)
 zona_admin_service = ZonaAdminService(cliente_abonado_service, ticket_service)
 
-
-
 op = -1
 while op != 0:
     print("\nBienvenido al Parking JLGM.\n"
@@ -75,8 +96,8 @@ while op != 0:
           "Pulse 2 para ABONARSE \n"
           "Pulse 3 para entrar como ADMINISTRADOR \n"
           "Pulse 0 para salir")
-    op = int(input())
     try:
+        op = int(input())
         if op != 1 and op != 2 and op != 3 and op != 0:
             raise ValueError
         else:
@@ -90,8 +111,8 @@ while op != 0:
                           "Pulse 3 para depositar un vehículo como abonado \n"
                           "Pulse 4 para retirar un vehiculo como abonado \n"
                           "Pulse 0 para salir")
-                    op2 = int(input())
                     try:
+                        op2 = int(input())
                         if op2 != 1 and op2 != 2 and op2 != 3 and op2 != 4 and op2 != 0:
                             raise ValueError
                         else:
@@ -155,14 +176,14 @@ while op != 0:
                         print("ERROR. Tienes que introducir una de las opciones que se piden")
             elif op == 2:
                 while op2 != 0:
-                    print("Has accedido al menú de ABONOS \n"
+                    print("\nHas accedido al menú de ABONOS \n"
                           "------------------------------------------- \n"
                           "Pulse 1 para darte de alta\n"
                           "Pulse 2 para modificarlo \n"
                           "Pulse 3 para darte de baja \n"
                           "Pulse 0 para salir")
-                    op2 = int(input())
                     try:
+                        op2 = int(input())
                         if op2 != 1 and op2 != 2 and op2 != 3 and op2 != 0:
                             raise ValueError
                         else:
@@ -217,6 +238,7 @@ while op != 0:
                                                                                        vehiculo_del_abonado, plaza):
                                     print(zona_admin_service.imprimir_alta_abonado(dni))
                                     print("Usted se ha abonado al Parking JLGM con éxito\n")
+
                                 else:
                                     print("\nNo se ha agregado correctamente como abonado. Inténtelo de nuevo\n")
                             elif op2 == 2:
@@ -224,8 +246,8 @@ while op != 0:
                                       "-----------------------------------\n"
                                       "Pulse 1 para modificar sus datos personales\n"
                                       "Pulse 2 para renovar su abono")
-                                op3 = int(input())
                                 try:
+                                    op3 = int(input())
                                     if op3 != 1 and op3 != 2 and op3 != 0:
                                         raise ValueError
                                     else:
@@ -245,7 +267,7 @@ while op != 0:
                                                     cliente_abonado_a_modificar, nombre, apellidos, num_tarjeta, email)
                                                 print("\nSu abono se ha modificado con éxito\n")
                                             else:
-                                                print("\nEl dni o la matrícula son incorrecto/s.\n")
+                                                print("\nEl dni es incorrecto.\n")
                                         elif op3 == 2:
                                             dni = input("Introduce tu dni para poder acceder a tu abono: ")
                                             comprobacion = False
@@ -278,9 +300,9 @@ while op != 0:
                                                 zona_admin_service.renovar_abono_del_cliente(cliente_abonado_a_renovar)
                                                 print("\nSu abono se ha modificado con éxito\n")
                                             else:
-                                                print("\nEl dni o la matrícula son incorrecto/s.\n")
+                                                print("\nEl dni es incorrecto.\n")
                                 except ValueError:
-                                    print("ERROR. Tienes que introducir una de las opciones que se piden")
+                                    print("\nERROR. Tienes que introducir una de las opciones que se piden")
                             elif op2 == 3:
                                 dni = input("Introduce tu dni para poder acceder a tu abono: ")
                                 comprobacion = False
@@ -292,7 +314,7 @@ while op != 0:
                                     zona_admin_service.dar_de_baja_a_un_cliente_abonado(cliente_abonado_a_eliminar)
                                     print("\nSe ha dado de baja con éxito\n")
                     except ValueError:
-                        print("ERROR. Tienes que introducir una de las opciones que se piden")
+                        print("\nERROR. Tienes que introducir una de las opciones que se piden")
             elif op == 3:
                 usuario = input("\nPara entrar como ADMINISTRADOR, primeramente deberá realizar un loguin.\n"
                                 "\nPara empezar introduzca su usuario: ")
@@ -308,16 +330,14 @@ while op != 0:
                               "Pulse 3 para consultar a los abonados \n"
                               "Pulse 4 para ver la caducidad de abonos\n"
                               "Pulse 0 para salir")
-                        op2 = int(input())
                         try:
+                            op2 = int(input())
                             if op2 != 1 and op2 != 2 and op2 != 3 and op2 != 4:
                                 raise ValueError
                             else:
                                 if op2 == 1:
                                     print(parking_service.ver_plazas_parking(parking))
                                 elif op2 == 2:
-                                    for i in lista_tickets:
-                                        print(i)
                                     print("\n¡¡¡Recuerda la primera fecha debe ser más pequeña que la segunda!!!")
                                     anno_primero = input("Año: ")
                                     mes_primero = input("Mes: ")
@@ -334,7 +354,10 @@ while op != 0:
                                     minutos_segundo = input("Minutos: ")
                                     fecha_segunda = datetime(int(anno_segundo), int(mes_segundo), int(dia_segundo), int(hora_segundo),
                                                              int(minutos_segundo))
-                                    print(zona_admin_service.imprimir_facturacion_entre_fechas(fecha_primera, fecha_segunda))
+                                    for i in zona_admin_service.imprimir_tickets_pagados(fecha_primera, fecha_segunda):
+                                        print(i)
+                                    print(f"\nEl total recaudado entre la fecha: {fecha_primera} "
+                                          f"y la fecha: {fecha_segunda} es de {round(zona_admin_service.calcular_facturacion_entre_fechas(fecha_primera, fecha_segunda), 2)} €")
                                 elif op2 == 3:
                                     print(zona_admin_service.imprimir_clientes_abonados())
                                 elif op2 == 4:
@@ -343,9 +366,9 @@ while op != 0:
                                           "Pulse 1 para consultar la caducidad de los abonos de un mes concreto\n"
                                           "Pulse 2 para consultar los abonos que caducan en los siguientes 10 días\n"
                                           "Pulse 0 para salir")
-                                    op3 = int(input())
                                     try:
-                                        if op3 != 1 and op3 != 2 and op3!= 0:
+                                        op3 = int(input())
+                                        if op3 != 1 and op3 != 2 and op3 != 0:
                                             raise ValueError
                                         else:
                                             if op3 == 1:
@@ -355,12 +378,12 @@ while op != 0:
                                             elif op3 == 2:
                                                 print(zona_admin_service.imprimir_caducidad_diez_dias())
                                     except ValueError:
-                                        print("ERROR. Tienes que introducir una de las opciones que se piden")
+                                        print("\nERROR. Tienes que introducir una de las opciones que se piden")
                         except ValueError:
-                            print("ERROR. Tienes que introducir una de las opciones que se piden")
+                            print("\nERROR. Tienes que introducir una de las opciones que se piden")
                 else:
-                    print("¡¡¡CREDENCIALES INCORRECTAS!!! Inténtelo de nuevo")
+                    print("\n¡¡¡CREDENCIALES INCORRECTAS!!! Inténtelo de nuevo")
             elif op == 0:
                 break
     except ValueError:
-        print("ERROR. Tienes que introducir una de las opciones que se piden")
+        print("\nERROR. Tienes que introducir una de las opciones que se piden")

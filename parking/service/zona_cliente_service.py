@@ -48,6 +48,7 @@ class ZonaClienteService:
         self.__ticket_service = ticket_service
 
     def generar_num_plaza_turismo(self, parking):
+        num_plaza = 0
         for i in parking.lista_vehiculos:
             num_plaza = random.randint(1, 56)
             while i.plaza.num_plaza == num_plaza:
@@ -55,6 +56,7 @@ class ZonaClienteService:
         return num_plaza
 
     def generar_num_plaza_motocicleta(self, parking):
+        num_plaza = 0
         for i in parking.lista_vehiculos:
             num_plaza = random.randint(57, 68)
             while i.plaza.num_plaza == num_plaza:
@@ -62,6 +64,7 @@ class ZonaClienteService:
         return num_plaza
 
     def generar_num_plaza_movilidad_reducida(self, parking):
+        num_plaza = 0
         for i in parking.lista_vehiculos:
             num_plaza = random.randint(68, 80)
             while i.plaza.num_plaza == num_plaza:
@@ -97,12 +100,12 @@ class ZonaClienteService:
         return False
 
     def depositar_vehiculo_normal(self, vehiculo):
-        if self.asignar_vehiculo_a_una_plaza(vehiculo):
+        if self.asignar_vehiculo_a_una_plaza(vehiculo) and not self.vehiculo_service.comprobar_matricula(vehiculo.matricula):
             self.ticket_service.crear_ticket_llegada(vehiculo)
             self.vehiculo_service.annadir_vehiculo(vehiculo)
             return print("El vehículo se ha depositado correctamente\n")
         else:
-            return print("El vehículo NO se ha depositado correctamente\n")
+            return print("\nEl vehículo NO se ha depositado correctamente\n")
 
     def retirar_vehiculo_normal(self, matricula, num_plaza, pin):
         vehiculo = self.vehiculo_service.buscar_por_matricula(matricula)
@@ -115,7 +118,7 @@ class ZonaClienteService:
             return self.ticket_service.crear_ticket_salida(vehiculo)
 
     def depositar_vehiculo_abonado(self, cliente_abonado, pin):
-        if cliente_abonado.plaza.pin == pin:
+        if cliente_abonado.plaza.pin == pin and not self.vehiculo_service.comprobar_matricula(cliente_abonado.vehiculo.matricula):
             cliente_abonado.vehiculo.plaza = cliente_abonado.plaza
             cliente_abonado.plaza.ocupada = True
             cliente_abonado.vehiculo.fecha_deposito = datetime.now()

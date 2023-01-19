@@ -26,23 +26,28 @@ class ZonaAdminService:
         self.__ticket_service = ticket_service
 
     def dar_de_alta_a_un_cliente_abonado(self, dni, nombre, apellidos, num_tarjeta, tipo, email, vehiculo, plaza):
-        if tipo == 1:
+        if tipo == 1 and not self.cliente_abonado_service.comprobar_dni:
             cliente_abonado = ClienteAbonado(dni, nombre, apellidos, num_tarjeta, tipo, email, datetime.now(),
                                              datetime.now() + timedelta(days=30), 25, vehiculo, plaza)
             self.cliente_abonado_service.annadir_cliente_abonado(cliente_abonado)
-        elif tipo == 2:
+            return True
+        elif tipo == 2 and not self.cliente_abonado_service.comprobar_dni:
             cliente_abonado = ClienteAbonado(dni, nombre, apellidos, num_tarjeta, tipo, email, datetime.now(),
                                              datetime.now() + timedelta(days=30 * 3), 70, vehiculo, plaza)
             self.cliente_abonado_service.annadir_cliente_abonado(cliente_abonado)
-        elif tipo == 3:
+            return True
+        elif tipo == 3 and not self.cliente_abonado_service.comprobar_dni:
             cliente_abonado = ClienteAbonado(dni, nombre, apellidos, num_tarjeta, tipo, email, datetime.now(),
                                              datetime.now() + timedelta(days=30 * 6), 130, vehiculo, plaza)
             self.cliente_abonado_service.annadir_cliente_abonado(cliente_abonado)
-        elif tipo == 4:
+            return True
+        elif tipo == 4 and not self.cliente_abonado_service.comprobar_dni:
             cliente_abonado = ClienteAbonado(dni, nombre, apellidos, num_tarjeta, tipo, email, datetime.now(),
                                              datetime.now() + timedelta(days=365), 200, vehiculo, plaza)
             self.cliente_abonado_service.annadir_cliente_abonado(cliente_abonado)
-        return True
+            return True
+        else:
+            return False
 
     def imprimir_alta_abonado(self, dni):
         cliente_abonado = self.cliente_abonado_service.buscar_cliente_abonado_por_dni(dni)
@@ -74,16 +79,19 @@ class ZonaAdminService:
     def dar_de_baja_a_un_cliente_abonado(self, cliente_abonado_a_eliminar):
         self.cliente_abonado_service.lista_clientes_abonados.remove(cliente_abonado_a_eliminar)
 
-    def imprimir_facturacion_entre_fechas(self, fecha_primera, fecha_segunda):
-        facturacion = self.ticket_service.calcular_facturacion_entre_fechas(fecha_primera, fecha_segunda)
+    def calcular_facturacion_entre_fechas(self, fecha_primera, fecha_segunda):
+        suma = 0.0
+        for i in self.ticket_service.lista_tickets:
+            if i.pago_realizado and fecha_primera <= i.vehiculo.fecha_salida <= fecha_segunda:
+                suma += i.calcular_tarifa_a_pagar(i.vehiculo)
+        return suma
 
-        for i in facturacion:
-            return "\nPARKING JLGM \n" \
-                  "------------------------------------------------- \n" \
-                  f"Matrícula: {i.vehiculo.matricula} \n" \
-                  f"Tiempo de estancia:  {i.vehiculo.fecha_salida - i.vehiculo.fecha_deposito} minutos\n" \
-                  f"Cobro realizado: {i.calcular_tarifa_a_pagar(i)} \n" \
-                  f"-----------------------------------------------\n"
+    def imprimir_tickets_pagados(self, fecha_primera, fecha_segunda):
+        resultado = list()
+        for i in self.ticket_service.lista_tickets:
+            if i.pago_realizado and fecha_primera <= i.vehiculo.fecha_salida <= fecha_segunda:
+                resultado.append(i)
+        return resultado
 
     def convertir_fecha(self, fecha_string):
         return datetime.strptime(fecha_string, '%Y%m%d')
@@ -97,6 +105,7 @@ class ZonaAdminService:
         resultado = self.cliente_abonado_service.buscar_caducidad_abonos_mes(mes)
         for i in resultado:
             return i
+
     def imprimir_caducidad_diez_dias(self):
         resultado = self.cliente_abonado_service.buscar_caducidad_diez_dias()
         for i in resultado:

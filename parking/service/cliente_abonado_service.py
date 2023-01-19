@@ -15,10 +15,7 @@ class ClienteAbonadoService:
         self.__lista_clientes_abonados = lista_clientes_abonados
 
     def buscar_cliente_abonado_por_dni(self, dni):
-        fichero_cliente_abonado = open("./data/clientes_abonados", "rb")
-        datos_cliente_abonado = pickle.load(fichero_cliente_abonado)
-        fichero_cliente_abonado.close()
-        for i in datos_cliente_abonado:
+        for i in self.lista_clientes_abonados:
             if i.dni == dni:
                 return i
         return None
@@ -40,11 +37,8 @@ class ClienteAbonadoService:
         fichero_cliente_abonado.close()
 
     def buscar_clientes_abonados(self):
-        fichero_cliente_abonado = open("./data/clientes_abonados", "rb")
-        datos_cliente_abonado = pickle.load(fichero_cliente_abonado)
-        fichero_cliente_abonado.close()
         result = list()
-        for i in datos_cliente_abonado:
+        for i in self.lista_clientes_abonados:
             result.append(i)
         return result
 
@@ -62,3 +56,9 @@ class ClienteAbonadoService:
             if datetime.now() < i.fecha_caducidad < fecha_final:
                 resultado.append(i)
         return resultado
+
+    def comprobar_dni(self, dni):
+        for i in self.lista_clientes_abonados:
+            if i.dni == dni:
+                return True
+        return False

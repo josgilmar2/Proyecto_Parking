@@ -1,7 +1,7 @@
 from parking.models.turismo import Turismo
 from parking.models.motocicleta import Motocicleta
 from parking.models.movilidad_reducida import MovilidadReducida
-import datetime
+from datetime import timedelta
 
 
 class Ticket:
@@ -27,7 +27,7 @@ class Ticket:
         self.__pago_realizado = pago_realizado
 
     def __str__(self):
-        if self.vehiculo.fecha_salida is None:
+        if not self.pago_realizado:
             return "\nPARKING JLGM \n" \
                   "-------------------------------------------------- \n" \
                   f"Matrícula: {self.vehiculo.matricula} \n" \
@@ -45,9 +45,13 @@ class Ticket:
                    f"-----------------------------------------------\n"
 
     def calcular_tarifa_a_pagar(self, vehiculo):
+        tiempo_estacionado = divmod((vehiculo.fecha_salida - vehiculo.fecha_deposito).total_seconds(), 60)[0]
         if type(vehiculo) == Turismo:
-            return (vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.12
+            return tiempo_estacionado * 0.12
+            #return abs((vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.12)
         elif type(vehiculo) == Motocicleta:
-            return (vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.08
+            return tiempo_estacionado * 0.08
+            #return abs((vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.08)
         elif type(vehiculo) == MovilidadReducida:
-            return (vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.1
+            return tiempo_estacionado * 0.1
+            #return abs((vehiculo.fecha_salida.minute - vehiculo.fecha_deposito.minute) * 0.1)

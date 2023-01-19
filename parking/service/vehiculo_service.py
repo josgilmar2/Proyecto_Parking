@@ -21,11 +21,14 @@ class VehiculoService:
         fichero_vehiculo.close()
 
     def buscar_por_matricula(self, matricula):
-        fichero_vehiculo = open("./data/vehiculos", "rb")
-        datos_vehiculo = pickle.load(fichero_vehiculo)
-        fichero_vehiculo.close()
-        for i in datos_vehiculo:
+        for i in self.lista_vehiculos:
             if i.matricula == matricula:
                 return i
         return None
+
+    def comprobar_matricula(self, matricula):
+        for i in self.vehiculo_service.lista_vehiculos:
+            if i.matricula == matricula:
+                return True
+        return False
 
